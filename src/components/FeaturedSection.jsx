@@ -27,19 +27,11 @@ const FeaturedSection = () => {
           <button className="btn-gold">Shop Now</button>
         </motion.div>
 
-        {/* Right — products floating (no box, no square crop) */}
-        <motion.div
-          className="featured-image"
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.75, delay: 0.1 }}
-          viewport={{ once: true }}
-        >
-          <img
-            src="/images/products_featured.png"
-            alt="Jessiah Premium Products"
-          />
-        </motion.div>
+      </div>
+
+      {/* Fading image layer positioned absolutely to blend smoothly into background */}
+      <div className="featured-bg-wrap">
+        <img src="/images/pro4.jpg" alt="Featured Products" />
       </div>
 
       {/* ── Bottom centred heading ── */}
