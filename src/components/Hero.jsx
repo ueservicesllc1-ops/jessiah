@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Hero = () => {
+const Hero = ({ onShopClick }) => {
   return (
     <section className="hero">
 
@@ -46,7 +46,7 @@ const Hero = () => {
         </p>
 
         <p className="hero-subtitle">
-          Top-tier treatment for royalty products.
+          Top-tier treatment for <br /> royalty products.
         </p>
 
         <motion.button
@@ -54,6 +54,7 @@ const Hero = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.97 }}
           style={{ padding: '13px 36px', fontSize: '0.78rem' }}
+          onClick={onShopClick}
         >
           Shop Now
         </motion.button>

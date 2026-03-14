@@ -6,10 +6,10 @@ const navLinks = [
   { name: 'About', href: '#' },
   { name: 'Shop', href: '#' },
   { name: 'Consultants', href: '#' },
-  { name: 'Contact', href: '#' },
+  { name: 'Contact', href: '#contacto' },
 ];
 
-const Navbar = () => {
+const Navbar = ({ onCartClick, onShopClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -17,10 +17,9 @@ const Navbar = () => {
       <nav className="navbar">
         {/* Logo */}
         <a className="navbar-logo" href="#">
-          <img src="/images/LOGO.png" alt="Jessiah Logo" />
           <div className="navbar-logo-text">
-            <span className="brand-name">Jessiah</span>
-            <span className="brand-sub">Hair Line</span>
+            <span className="brand-name">JESSIAH</span>
+            <span className="brand-sub">HAIR LINE</span>
           </div>
         </a>
 
@@ -28,7 +27,16 @@ const Navbar = () => {
         <ul className="navbar-links">
           {navLinks.map((l, i) => (
             <li key={l.name}>
-              <a href={l.href} className={i === 0 ? 'active' : ''}>
+              <a 
+                href={l.href} 
+                className={i === 0 ? 'active' : ''}
+                onClick={(e) => {
+                  if (l.name === 'Shop' && onShopClick) {
+                    e.preventDefault();
+                    onShopClick();
+                  }
+                }}
+              >
                 {l.name}
               </a>
             </li>
@@ -40,10 +48,14 @@ const Navbar = () => {
           <button className="icon-btn" aria-label="Search">
             <Search size={16} />
           </button>
-          <button className="icon-btn" aria-label="Cart">
+          <button className="icon-btn" aria-label="Cart" onClick={onCartClick}>
             <ShoppingBag size={16} />
           </button>
-          <button className="btn-gold" style={{ padding: '9px 22px', fontSize: '0.68rem' }}>
+          <button 
+            className="btn-gold" 
+            style={{ padding: '9px 22px', fontSize: '0.68rem' }}
+            onClick={onShopClick}
+          >
             Shop Now
           </button>
           <button
@@ -67,11 +79,17 @@ const Navbar = () => {
             <X size={26} />
           </button>
           {navLinks.map((l) => (
-            <a key={l.name} href={l.href} onClick={() => setMenuOpen(false)}>
+            <a key={l.name} href={l.href} onClick={(e) => {
+              setMenuOpen(false);
+              if (l.name === 'Shop' && onShopClick) {
+                e.preventDefault();
+                onShopClick();
+              }
+            }}>
               {l.name}
             </a>
           ))}
-          <button className="btn-gold" onClick={() => setMenuOpen(false)}>
+          <button className="btn-gold" onClick={() => { setMenuOpen(false); onShopClick(); }}>
             Shop Now
           </button>
         </div>

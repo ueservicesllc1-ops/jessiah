@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const FeaturedSection = () => {
+const FeaturedSection = ({ onShopClick }) => {
   return (
     <section className="featured">
 
@@ -24,7 +24,7 @@ const FeaturedSection = () => {
             Explore our premium collection of hair care<br />
             and beauty products.
           </p>
-          <button className="btn-gold">Shop Now</button>
+          <button className="btn-gold" onClick={onShopClick}>Shop Now</button>
         </motion.div>
 
       </div>

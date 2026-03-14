@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "aws-sdk": "^2.1693.0",
     "axios": "^1.13.6",
     "body-parser": "^2.2.2",
@@ -22,7 +23,8 @@
     "multer": "^2.1.1",
     "multer-s3": "^3.0.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "shippo": "^2.18.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.1",

@@ -8,7 +8,7 @@ const categories = [
   { name: 'Accessories',    img: '/images/accessories.png' },
 ];
 
-const CategoryGrid = () => {
+const CategoryGrid = ({ onShopClick }) => {
   return (
     <section className="categories">
       <div className="categories-grid">
@@ -25,7 +25,11 @@ const CategoryGrid = () => {
               <img src={cat.img} alt={cat.name} />
             </div>
             <h3>{cat.name}</h3>
-            <button className="btn-gold" style={{ padding: '9px 28px', fontSize: '0.7rem' }}>
+            <button 
+              className="btn-gold" 
+              style={{ padding: '9px 28px', fontSize: '0.7rem' }}
+              onClick={onShopClick}
+            >
               Shop Now
             </button>
           </motion.div>

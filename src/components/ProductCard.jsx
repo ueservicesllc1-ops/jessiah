@@ -1,0 +1,46 @@
+import React from 'react';
+import { ShoppingBag, Star } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+const ProductCard = ({ product, onAddToCart }) => {
+  return (
+    <motion.div 
+      className="product-card"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="product-image-container">
+        {product.isNew && <span className="product-badge">Nuevo</span>}
+        <img src={product.image} alt={product.name} className="product-image" />
+        <button 
+          className="quick-add-btn" 
+          onClick={() => onAddToCart(product)}
+        >
+          <ShoppingBag size={18} />
+          <span>Añadir al Carrito</span>
+        </button>
+      </div>
+      
+      <div className="product-info">
+        <div className="product-category">{product.category}</div>
+        <h3 className="product-name">{product.name}</h3>
+        
+        <div className="product-rating">
+          {[...Array(5)].map((_, i) => (
+            <Star key={i} size={12} fill={i < product.rating ? "#c8882a" : "none"} stroke="#c8882a" />
+          ))}
+          <span>({product.reviews})</span>
+        </div>
+        
+        <div className="product-price">
+          <span className="current-price">${product.price.toFixed(2)}</span>
+          {product.oldPrice && <span className="old-price">${product.oldPrice.toFixed(2)}</span>}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default ProductCard;
