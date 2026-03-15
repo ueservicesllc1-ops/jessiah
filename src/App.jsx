@@ -14,8 +14,12 @@ import Shop from './components/Shop';
 import Admin from './components/Admin';
 import WhyChoose from './components/WhyChoose';
 import BestSellers from './components/BestSellers';
+import { translations } from './translations';
 
 function App() {
+  const [language, setLanguage] = useState('es');
+  const t = translations[language];
+
    const [currentView, setCurrentView] = useState('home');
    const [cartItems, setCartItems] = useState([]);
    const [addedItem, setAddedItem] = useState(null);
@@ -69,38 +73,42 @@ function App() {
          }}
          currentView={currentView}
          cartCount={cartItems.reduce((acc, i) => acc + i.quantity, 0)}
+         language={language}
+         setLanguage={setLanguage}
+         t={t}
        />
 
-      <main className="content-wrap">
-        {currentView === 'home' ? (
-          <>
-            <Hero onShopClick={navigateToShop} />
-            <WhyChoose />
-            <BestSellers onAddToCart={handleAddToCart} />
+       <main className="content-wrap">
+         {currentView === 'home' ? (
+           <>
+             <Hero onShopClick={navigateToShop} t={t.hero} />
+             <WhyChoose t={t.why} />
+             <BestSellers onAddToCart={handleAddToCart} t={t.best} catT={t.categories} />
 
 
-            <ContactForm />
-          </>
-        ) : currentView === 'privacy' ? (
-          <PrivacyPolicy onBack={navigateToHome} />
-        ) : currentView === 'terms' ? (
-          <TermsAndConditions onBack={navigateToHome} />
-        ) : currentView === 'about' ? (
-          <AboutUs onBack={navigateToHome} />
-        ) : currentView === 'shop' ? (
-          <Shop onBack={navigateToHome} onAddToCart={handleAddToCart} />
-        ) : currentView === 'cart' ? (
-          <Cart 
-            onBack={navigateToShop} 
-            cartItems={cartItems}
-            updateQuantity={updateCartQuantity}
-            removeItem={removeFromCart}
-            setCartItems={setCartItems}
-          />
-        ) : (
-          <Admin onBack={navigateToHome} />
-        )}
-      </main>
+             <ContactForm t={t.contact} />
+           </>
+         ) : currentView === 'privacy' ? (
+           <PrivacyPolicy onBack={navigateToHome} t={t.privacy} />
+         ) : currentView === 'terms' ? (
+           <TermsAndConditions onBack={navigateToHome} t={t.terms} />
+         ) : currentView === 'about' ? (
+           <AboutUs onBack={navigateToHome} t={t.about} />
+         ) : currentView === 'shop' ? (
+           <Shop onBack={navigateToHome} onAddToCart={handleAddToCart} t={t.shop} catT={t.categories} />
+         ) : currentView === 'cart' ? (
+           <Cart 
+             onBack={navigateToShop} 
+             cartItems={cartItems}
+             updateQuantity={updateCartQuantity}
+             removeItem={removeFromCart}
+             setCartItems={setCartItems}
+             t={t.cart}
+           />
+         ) : (
+           <Admin onBack={navigateToHome} t={t.admin} />
+         )}
+       </main>
 
        {currentView !== 'admin' && (
          <footer className="footer">
@@ -119,10 +127,10 @@ function App() {
                      navigateToHome();
                      setTimeout(() => window.location.hash = 'contacto', 100);
                    }
-                 }}>Contacto</a></li>
-                 <li><a href="#privacy" onClick={(e) => { e.preventDefault(); navigateToPrivacy(); }}>Política de Privacidad</a></li>
-                 <li><a href="#nosotros" onClick={(e) => { e.preventDefault(); navigateToAbout(); }}>Nosotros</a></li>
-                 <li><a href="#terms" onClick={(e) => { e.preventDefault(); navigateToTerms(); }}>Términos y Condiciones</a></li>
+                 }}>{t.nav.contact}</a></li>
+                 <li><a href="#privacy" onClick={(e) => { e.preventDefault(); navigateToPrivacy(); }}>{t.footer.privacy}</a></li>
+                 <li><a href="#nosotros" onClick={(e) => { e.preventDefault(); navigateToAbout(); }}>{t.footer.nosotros}</a></li>
+                 <li><a href="#terms" onClick={(e) => { e.preventDefault(); navigateToTerms(); }}>{t.footer.terms}</a></li>
                </ul>
              </div>
  
@@ -133,18 +141,18 @@ function App() {
              <div className="footer-divider" />
              <div className="footer-bottom-content">
                <p className="footer-copy">
-                 © 2026 Jessiah Hair Line. All rights reserved.
+                 {t.footer.rights}
                </p>
                <button 
                  className="admin-login-link" 
                  onClick={navigateToAdmin}
                  style={{ background: 'none', border: 'none', color: '#000', fontSize: '0.65rem', fontWeight: 'bold', cursor: 'pointer', opacity: 0.6 }}
                >
-                 Acceso Admin
+                 {t.footer.admin}
                </button>
              </div>
              <p className="footer-credits">
-               Potenciado y diseñado por <a href="https://freedomlabs.dev" target="_blank" rel="noopener noreferrer">Freedom Labs</a>
+               {t.footer.credits} <a href="https://freedomlabs.dev" target="_blank" rel="noopener noreferrer">Freedom Labs</a>
              </p>
            </div>
          </footer>
@@ -161,8 +169,8 @@ function App() {
              <div className="added-modal-icon">
                <CheckCircle size={40} />
              </div>
-             <h2>¡Producto Agregado!</h2>
-             <p>Has añadido un nuevo artículo a tu colección de belleza Jessiah.</p>
+             <h2>{t.modal.added}</h2>
+             <p>{t.modal.added_desc || t.modal.desc}</p>
              
              <div className="product-shortcut">
                <img src={addedItem.image} alt={addedItem.name} className="shortcut-img" />
@@ -174,10 +182,10 @@ function App() {
  
              <div className="modal-actions">
                <button className="btn-gold modal-btn-view" onClick={() => { setShowAddedModal(false); navigateToCart(); }}>
-                 Ver Carrito <ShoppingBag size={16} style={{ marginLeft: '10px' }} />
+                 {t.modal.view_cart} <ShoppingBag size={16} style={{ marginLeft: '10px' }} />
                </button>
                <button className="modal-btn-continue" onClick={() => setShowAddedModal(false)}>
-                 Seguir Comprando
+                 {t.modal.continue}
                </button>
              </div>
            </motion.div>

@@ -9,15 +9,25 @@ const navLinks = [
   { name: 'Contact', href: '#contacto' },
 ];
 
-const Navbar = ({ onCartClick, onShopClick, onHomeClick, onAboutClick, onContactClick, currentView, cartCount = 0 }) => {
+const Navbar = ({ 
+  onCartClick, onShopClick, onHomeClick, onAboutClick, onContactClick, 
+  currentView, cartCount = 0, language, setLanguage, t 
+}) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleNavClick = (e, name, href) => {
+  const navLinks = [
+    { name: t.nav.home, key: 'Home' },
+    { name: t.nav.about, key: 'About' },
+    { name: t.nav.shop, key: 'Shop' },
+    { name: t.nav.contact, key: 'Contact', href: '#contacto' },
+  ];
+
+  const handleNavClick = (e, key) => {
     e.preventDefault();
-    if (name === 'Home') onHomeClick?.();
-    else if (name === 'About') onAboutClick?.();
-    else if (name === 'Shop') onShopClick?.();
-    else if (name === 'Contact') onContactClick?.();
+    if (key === 'Home') onHomeClick?.();
+    else if (key === 'About') onAboutClick?.();
+    else if (key === 'Shop') onShopClick?.();
+    else if (key === 'Contact') onContactClick?.();
   };
 
   return (
@@ -30,12 +40,12 @@ const Navbar = ({ onCartClick, onShopClick, onHomeClick, onAboutClick, onContact
 
         {/* Center links */}
         <ul className="navbar-links">
-          {navLinks.map((l, i) => (
-            <li key={l.name}>
+          {navLinks.map((l) => (
+            <li key={l.key}>
               <a 
-                href={l.href} 
-                className={currentView === l.name.toLowerCase() ? 'active' : ''}
-                onClick={(e) => handleNavClick(e, l.name, l.href)}
+                href={l.href || '#'} 
+                className={currentView === l.key.toLowerCase() ? 'active' : ''}
+                onClick={(e) => handleNavClick(e, l.key)}
               >
                 {l.name}
               </a>
@@ -45,9 +55,22 @@ const Navbar = ({ onCartClick, onShopClick, onHomeClick, onAboutClick, onContact
 
         {/* Right */}
         <div className="navbar-right">
-          <button className="icon-btn" aria-label="Search">
-            <Search size={16} />
-          </button>
+          <div className="lang-switcher">
+            <button 
+              className={`lang-btn ${language === 'es' ? 'active' : ''}`} 
+              onClick={() => setLanguage('es')}
+            >
+              ES
+            </button>
+            <span className="lang-divider">|</span>
+            <button 
+              className={`lang-btn ${language === 'en' ? 'active' : ''}`} 
+              onClick={() => setLanguage('en')}
+            >
+              EN
+            </button>
+          </div>
+
           <div className="cart-btn-wrapper">
             <button className="icon-btn" aria-label="Cart" onClick={onCartClick}>
               <ShoppingBag size={18} />
@@ -59,7 +82,7 @@ const Navbar = ({ onCartClick, onShopClick, onHomeClick, onAboutClick, onContact
             style={{ padding: '9px 22px', fontSize: '0.68rem' }}
             onClick={onShopClick}
           >
-            Shop Now
+            {t.nav.shop_now}
           </button>
           <button
             className="icon-btn mobile-menu-btn"
@@ -83,19 +106,26 @@ const Navbar = ({ onCartClick, onShopClick, onHomeClick, onAboutClick, onContact
           </button>
           {navLinks.map((l) => (
             <a 
-              key={l.name} 
-              href={l.href} 
-              className={currentView === l.name.toLowerCase() ? 'active' : ''}
+              key={l.key} 
+              href={l.href || '#'} 
+              className={currentView === l.key.toLowerCase() ? 'active' : ''}
               onClick={(e) => {
                 setMenuOpen(false);
-                handleNavClick(e, l.name, l.href);
+                handleNavClick(e, l.key);
               }}
             >
               {l.name}
             </a>
           ))}
+          
+          <div className="mobile-lang-switcher">
+            <span onClick={() => { setLanguage('es'); setMenuOpen(false); }}>ESPAÑOL</span>
+            <span className="divider">/</span>
+            <span onClick={() => { setLanguage('en'); setMenuOpen(false); }}>ENGLISH</span>
+          </div>
+
           <button className="btn-gold" onClick={() => { setMenuOpen(false); onShopClick(); }}>
-            Shop Now
+            {t.nav.shop_now}
           </button>
         </div>
       )}

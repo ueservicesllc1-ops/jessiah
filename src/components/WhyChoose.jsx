@@ -30,7 +30,15 @@ const benefits = [
   }
 ];
 
-const WhyChoose = () => {
+const WhyChoose = ({ t }) => {
+  const benefitIcons = [
+    <Leaf size={28} />,
+    <Milk size={28} />,
+    <Sprout size={28} />,
+    <FlaskConical size={28} />,
+    <Ban size={28} />
+  ];
+
   return (
     <section className="why-choose">
       <div className="container">
@@ -41,11 +49,11 @@ const WhyChoose = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          Why Choose Jessiah?
+          {t.title}
         </motion.h2>
 
         <div className="benefits-grid">
-          {benefits.map((benefit, idx) => (
+          {t.items.map((benefit, idx) => (
             <motion.div 
               key={idx}
               className="benefit-item"
@@ -55,13 +63,13 @@ const WhyChoose = () => {
               viewport={{ once: true }}
             >
               <div className="benefit-icon">
-                {benefit.icon}
+                {benefitIcons[idx]}
               </div>
               <div className="benefit-content">
                 <h3>{benefit.title}</h3>
-                <p>{benefit.subtitle}</p>
+                <p>{benefit.desc}</p>
               </div>
-              {idx < benefits.length - 1 && <div className="benefit-divider" />}
+              {idx < t.items.length - 1 && <div className="benefit-divider" />}
             </motion.div>
           ))}
         </div>

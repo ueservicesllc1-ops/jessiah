@@ -183,6 +183,49 @@ body {
 }
 .icon-btn:hover { color: var(--gold); }
 
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 15px;
+}
+
+.lang-btn {
+  background: none;
+  border: none;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(0,0,0,0.4);
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 4px;
+}
+
+.lang-btn.active {
+  color: var(--gold);
+}
+
+.lang-divider {
+  font-size: 0.6rem;
+  color: #eee;
+}
+
+.mobile-lang-switcher {
+  margin: 40px 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.4);
+}
+
+.mobile-lang-switcher .divider { color: rgba(255,255,255,0.1); }
+
+.mobile-lang-switcher span { cursor: pointer; transition: 0.3s; }
+.mobile-lang-switcher span:hover { color: var(--gold); }
+
 .cart-btn-wrapper {
   position: relative;
   display: flex;

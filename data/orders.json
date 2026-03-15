@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ORD-0625",
+    "customer": "luis uchubanda",
+    "email": "luisuf@gmail.com",
+    "phone": "5513014573",
+    "address": "276 e 19 th st, paterson, NJ 07524",
+    "products": "HAIR SKIN (x1)",
+    "subtotal": 20,
+    "shipping": 5.4,
+    "total": 25.4,
+    "paymentProof": "blob:http://localhost:5173/0d289a3f-47fc-4eeb-8553-797be399b4eb",
+    "status": "Pendiente",
+    "date": "2026-03-15"
+  }
+]

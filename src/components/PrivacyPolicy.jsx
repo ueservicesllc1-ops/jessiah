@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Lock, Eye, FileText, ArrowLeft } from 'lucide-react';
 
-const PrivacyPolicy = ({ onBack }) => {
+const PrivacyPolicy = ({ onBack, t }) => {
   // Scroll to top when the component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -10,24 +10,24 @@ const PrivacyPolicy = ({ onBack }) => {
 
   const sections = [
     {
-      title: "1. Información que Recopilamos",
+      title: t.s1_t,
       icon: <Eye size={22} />,
-      content: `Recopilamos varios tipos de información para brindarle y mejorar nuestros servicios. Esto incluye información personal que nos proporciona directamente, como su nombre, dirección de facturación, dirección de envío, dirección de correo electrónico y número de teléfono cuando realiza una compra o se suscribe a nuestro boletín.`
+      content: t.s1_c
     },
     {
-      title: "2. Cómo Utilizamos su Información",
+      title: t.s2_t,
       icon: <FileText size={22} />,
-      content: `Utilizamos la información recopilada para diversos fines comerciales, que incluyen: Procesar sus compras y gestionar el envío, comunicarnos con usted sobre sus pedidos, enviarle información promocional (siempre que haya dado su consentimiento), mejorar nuestro sitio web y prevenir fraudes o actividades maliciosas.`
+      content: t.s2_c
     },
     {
-      title: "3. Uso de Cookies",
+      title: t.s3_t,
       icon: <Lock size={22} />,
-      content: `Utilizamos cookies y tecnologías de seguimiento similares para rastrear la actividad en nuestro servicio y mantener cierta información. Las cookies son archivos con una pequeña cantidad de datos que pueden incluir un identificador único anónimo. Usted puede configurar su navegador para rechazar todas las cookies.`
+      content: t.s3_c
     },
     {
-      title: "4. Seguridad de los Datos",
+      title: t.s4_t,
       icon: <Shield size={22} />,
-      content: `La seguridad de sus datos es importante para nosotros. Implementamos medidas de seguridad estándar de la industria para proteger su información personal. Sin embargo, recuerde que ningún método de transmisión por Internet o método de almacenamiento electrónico es 100% seguro.`
+      content: t.s4_c
     }
   ];
 
@@ -41,9 +41,9 @@ const PrivacyPolicy = ({ onBack }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            Política de <em>Privacidad</em>
+            {t.title} <em>{t.title_em}</em>
           </motion.h1>
-          <p className="last-updated">Última actualización: Marzo 2026</p>
+          <p className="last-updated">{t.last}</p>
         </div>
       </section>
 
@@ -55,7 +55,7 @@ const PrivacyPolicy = ({ onBack }) => {
           transition={{ delay: 0.2 }}
         >
           <p>
-            En <strong>Jessiah Hair Line</strong>, valoramos profundamente su privacidad y estamos comprometidos con la protección de sus datos personales. Esta Política de Privacidad describe cómo recopilamos, utilizamos y divulgamos su información cuando visita nuestro sitio web o utiliza nuestros servicios de cuidado capilar de lujo.
+            {t.intro}
           </p>
         </motion.div>
 
@@ -82,8 +82,8 @@ const PrivacyPolicy = ({ onBack }) => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <h3>¿Preguntas sobre su privacidad?</h3>
-          <p>Si tiene alguna pregunta sobre esta Política de Privacidad, puede contactarnos enviando un correo a:</p>
+          <h3>{t.q}</h3>
+          <p>{t.q_desc}</p>
           <a href="mailto:privacy@jessiah.com" className="privacy-email">privacy@jessiah.com</a>
         </motion.div>
       </main>

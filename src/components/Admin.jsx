@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Package, MessageSquare, ShoppingCart, Plus, Trash2, Image as ImageIcon, CheckCircle, Clock } from 'lucide-react';
 import { getProducts, addProduct, updateProduct, deleteProduct } from '../firebase/services';
 
-const Admin = ({ onBack }) => {
+const Admin = ({ onBack, t }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
@@ -40,7 +40,6 @@ const Admin = ({ onBack }) => {
         setProducts(pData);
       }
       
-      // Keep other fetch for messages/orders if server handles them or implement Firestore for them too
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
       const [mRes, oRes] = await Promise.all([
         fetch(`${API_URL}/api/messages`).catch(() => ({ json: () => [] })),
@@ -60,7 +59,7 @@ const Admin = ({ onBack }) => {
       setIsAuthenticated(true);
       setError('');
     } else {
-      setError('PIN Incorrecto. Intente de nuevo.');
+      setError(t.error);
       setPin('');
     }
   };
@@ -71,10 +70,10 @@ const Admin = ({ onBack }) => {
     try {
       if (editingProduct) {
         await updateProduct(editingProduct.id, newProduct, newProduct.image);
-        alert("Producto actualizado con éxito en Firestore");
+        alert(t.success_update);
       } else {
         await addProduct(newProduct, newProduct.image);
-        alert("Producto creado con éxito en Firestore");
+        alert(t.success_add);
       }
       
       setNewProduct({ name: '', price: '', weight: '', description: '', category: 'Limpieza', image: null });
@@ -83,7 +82,7 @@ const Admin = ({ onBack }) => {
       fetchData(); // Refresh list
     } catch (err) {
       console.error("Error submitting product:", err);
-      alert("Error guardando en Firestore: " + err.message);
+      alert("Error: " + err.message);
     } finally {
       setIsUploading(false);
     }
@@ -100,7 +99,6 @@ const Admin = ({ onBack }) => {
       image: null
     });
     setPreviewUrl(product.image);
-    // Scroll to form
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -123,7 +121,7 @@ const Admin = ({ onBack }) => {
   };
 
   const handleDeleteProduct = async (id) => {
-    if (window.confirm("¿Seguro que quieres eliminar este producto de Firestore?")) {
+    if (window.confirm(t.delete_confirm)) {
       try {
         await deleteProduct(id);
         fetchData();
@@ -145,8 +143,8 @@ const Admin = ({ onBack }) => {
             <span>JESSIAH</span>
             <small>SEGURIDAD</small>
           </div>
-          <h2>Panel de Administración</h2>
-          <p>Por favor, introduzca su PIN de acceso.</p>
+          <h2>{t.login_title}</h2>
+          <p>{t.pin_placeholder}</p>
           
           <form onSubmit={handleLogin}>
             <input 
@@ -158,10 +156,10 @@ const Admin = ({ onBack }) => {
               autoFocus
             />
             {error && <p className="error-msg">{error}</p>}
-            <button type="submit" className="admin-btn-primary">Entrar</button>
+            <button type="submit" className="admin-btn-primary">{t.enter}</button>
           </form>
           
-          <button className="back-to-site" onClick={onBack}>Cancelar</button>
+          <button className="back-to-site" onClick={onBack}>{t.cancel}</button>
         </motion.div>
       </div>
     );
@@ -181,42 +179,42 @@ const Admin = ({ onBack }) => {
             onClick={() => setActiveTab('products')}
           >
             <Package size={20} />
-            <span>Productos</span>
+            <span>{t.products}</span>
           </button>
           <button 
             className={activeTab === 'messages' ? 'active' : ''} 
             onClick={() => setActiveTab('messages')}
           >
             <MessageSquare size={20} />
-            <span>Mensajes</span>
+            <span>{t.messages}</span>
           </button>
           <button 
             className={activeTab === 'orders' ? 'active' : ''} 
             onClick={() => setActiveTab('orders')}
           >
             <ShoppingCart size={20} />
-            <span>Órdenes</span>
+            <span>{t.orders}</span>
           </button>
         </nav>
 
         <button className="admin-logout" onClick={onBack}>
-          Volver al Sitio
+          {t.logout}
         </button>
       </aside>
 
       <main className="admin-main">
         <header className="admin-header">
-          <h1>{activeTab === 'products' ? 'Gestión de Productos' : activeTab === 'messages' ? 'Bandeja de Entrada' : 'Órdenes de Venta'}</h1>
+          <h1>{activeTab === 'products' ? t.products : activeTab === 'messages' ? t.messages : t.orders}</h1>
         </header>
 
         <section className="admin-content">
           {activeTab === 'products' && (
             <div className="admin-products-view">
               <div className="admin-card">
-                <h3>{editingProduct ? 'Editar Producto' : 'Crear Nuevo Producto'}</h3>
+                <h3>{editingProduct ? t.edit : t.create}</h3>
                 <form className="admin-form" onSubmit={handleProductSubmit}>
                   <div className="form-group">
-                    <label>Nombre del Producto</label>
+                    <label>{t.name}</label>
                     <input 
                       type="text" 
                       value={newProduct.name}
@@ -227,7 +225,7 @@ const Admin = ({ onBack }) => {
                   </div>
                   <div className="form-row">
                     <div className="form-group">
-                      <label>Precio ($)</label>
+                      <label>{t.price} ($)</label>
                       <input 
                         type="number" 
                         value={newProduct.price}
@@ -237,7 +235,7 @@ const Admin = ({ onBack }) => {
                       />
                     </div>
                     <div className="form-group">
-                      <label>Peso (lb)</label>
+                      <label>{t.weight} (lb)</label>
                       <input 
                         type="number" 
                         step="0.1"
@@ -248,7 +246,7 @@ const Admin = ({ onBack }) => {
                       />
                     </div>
                     <div className="form-group">
-                      <label>Categoría</label>
+                      <label>{t.category}</label>
                       <select 
                         value={newProduct.category}
                         onChange={(e) => setNewProduct({...newProduct, category: e.target.value})}
@@ -261,15 +259,15 @@ const Admin = ({ onBack }) => {
                     </div>
                   </div>
                   <div className="form-group">
-                    <label>Descripción</label>
+                    <label>{t.description}</label>
                     <textarea 
                       value={newProduct.description}
                       onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}
-                      placeholder="Describe los beneficios..." 
+                      placeholder="..." 
                     />
                   </div>
                   <div className="form-group">
-                    <label>Imagen del Producto</label>
+                    <label>{t.image}</label>
                     <div className={`file-upload-zone ${previewUrl ? 'has-preview' : ''}`}>
                       {previewUrl ? (
                         <div className="image-preview-container">
@@ -288,7 +286,7 @@ const Admin = ({ onBack }) => {
                       ) : (
                         <>
                           <ImageIcon size={24} />
-                          <span>Click para subir foto</span>
+                          <span>{t.image}</span>
                         </>
                       )}
                       <input 
@@ -301,17 +299,17 @@ const Admin = ({ onBack }) => {
                   <div className="form-actions">
                     <button type="submit" className="admin-btn-primary" disabled={isUploading}>
                       {isUploading ? (
-                        <>Cargando...</>
+                        <>...</>
                       ) : (
                         <>
                           {editingProduct ? <CheckCircle size={18} /> : <Plus size={18} />}
-                          {editingProduct ? 'Actualizar Producto' : 'Guardar Producto'}
+                          {editingProduct ? t.update : t.save}
                         </>
                       )}
                     </button>
                     {editingProduct && (
                       <button type="button" className="admin-btn-secondary" onClick={cancelEdit}>
-                        Cancelar Edición
+                        {t.cancel}
                       </button>
                     )}
                   </div>
@@ -319,16 +317,16 @@ const Admin = ({ onBack }) => {
               </div>
 
               <div className="admin-card mt-30">
-                <h3>Productos Existentes</h3>
+                <h3>{t.existing}</h3>
                 <table className="admin-table">
                   <thead>
                     <tr>
-                      <th>Imagen</th>
-                      <th>Nombre</th>
-                      <th>Categoría</th>
-                      <th>Precio</th>
-                      <th>Peso (lb)</th>
-                      <th>Acciones</th>
+                      <th>{t.image}</th>
+                      <th>{t.name}</th>
+                      <th>{t.category}</th>
+                      <th>{t.price}</th>
+                      <th>{t.weight} (lb)</th>
+                      <th>{t.actions}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -345,7 +343,7 @@ const Admin = ({ onBack }) => {
                         <td>{p.weight || '0'} lb</td>
                         <td>
                           <div className="admin-actions">
-                            <button className="text-secondary" onClick={() => handleEditClick(p)}>Editar</button>
+                            <button className="text-secondary" onClick={() => handleEditClick(p)}>{t.edit}</button>
                             <button className="text-danger" onClick={() => handleDeleteProduct(p.id)}><Trash2 size={16} /></button>
                           </div>
                         </td>

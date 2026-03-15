@@ -2,36 +2,31 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Gavel, CreditCard, Truck, RefreshCw, ArrowLeft, AlertCircle } from 'lucide-react';
 
-const TermsAndConditions = ({ onBack }) => {
+const TermsAndConditions = ({ onBack, t }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const sections = [
     {
-      title: "1. Aceptación de Términos",
+      title: t.s1_t,
       icon: <Gavel size={22} />,
-      content: "Al acceder y utilizar este sitio web, usted acepta estar sujeto a los términos y condiciones aquí descritos. Si no está de acuerdo con alguna parte de estos términos, le rogamos que no utilice nuestros servicios."
+      content: t.s1_c
     },
     {
-      title: "2. Productos y Precios",
+      title: t.s2_t,
       icon: <CreditCard size={22} />,
-      content: "Jessiah Hair Line se reserva el derecho de modificar los precios y la disponibilidad de los productos en cualquier momento sin previo aviso. Nos esforzamos por mostrar los colores y detalles de los productos con la mayor precisión posible."
+      content: t.s2_c
     },
     {
-      title: "3. Envíos y Entregas",
+      title: t.s3_t,
       icon: <Truck size={22} />,
-      content: "Los tiempos de entrega son estimados y pueden variar según la ubicación y la logística de terceros. No nos hacemos responsables por retrasos fuera de nuestro control directo, aunque trabajamos para minimizarlos."
+      content: t.s3_c
     },
     {
-      title: "4. Devoluciones y Cambios",
+      title: t.s4_t,
       icon: <RefreshCw size={22} />,
-      content: "Debido a la naturaleza de los productos de cuidado personal e higiene, solo se aceptan devoluciones de productos sin abrir, con sellos intactos, dentro de los 14 días posteriores a la compra."
-    },
-    {
-      title: "5. Propiedad Intelectual",
-      icon: <AlertCircle size={22} />,
-      content: "Todo el contenido de este sitio (logos, imágenes, textos) es propiedad exclusiva de Jessiah Hair Line y está protegido por leyes de derechos de autor internacionales."
+      content: t.s4_c
     }
   ];
 
@@ -44,9 +39,9 @@ const TermsAndConditions = ({ onBack }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            Términos y <em>Condiciones</em>
+            {t.title} <em>{t.title_em}</em>
           </motion.h1>
-          <p className="last-updated">Última actualización: Marzo 2026</p>
+          <p className="last-updated">{t.last}</p>
         </div>
       </section>
 
@@ -58,7 +53,7 @@ const TermsAndConditions = ({ onBack }) => {
           transition={{ delay: 0.2 }}
         >
           <p>
-            Bienvenido a <strong>Jessiah Hair Line</strong>. Los siguientes términos regulan el uso de nuestra tienda online y la adquisición de nuestros productos exclusivos de cuidado capilar profesional.
+            {t.intro}
           </p>
         </motion.div>
 
@@ -78,16 +73,6 @@ const TermsAndConditions = ({ onBack }) => {
             </motion.section>
           ))}
         </div>
-
-        <motion.div 
-          className="contact-info-block"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-        >
-          <h3>Acuerdo de Usuario</h3>
-          <p>Al realizar una compra, usted confirma que tiene la mayoría de edad legal y que la información proporcionada es veraz y exacta.</p>
-        </motion.div>
       </main>
     </div>
   );

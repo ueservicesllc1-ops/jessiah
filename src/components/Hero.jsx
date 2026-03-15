@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Hero = ({ onShopClick }) => {
+const Hero = ({ onShopClick, t }) => {
   return (
     <section className="hero">
 
@@ -29,17 +29,15 @@ const Hero = ({ onShopClick }) => {
         transition={{ duration: 1.1, ease: 'easeOut' }}
       >
         <img src="/images/LOGO.png" alt="Jessiah" className="hero-logo-main" />
-        <div className="hero-text-badge">Professional Hair Care</div>
+        <div className="hero-text-badge">{t.tag}</div>
         
         <h1 className="hero-title">
-          Elevate your <br />
-          <span className="accent">Beauty Ritual</span>
+          {t.title1} <br />
+          <span className="accent">{t.title2}</span>
         </h1>
 
         <p className="hero-description">
-          Experience the ultimate luxury for your hair with our 
-          scientifically formulated treatments, designed for professionals 
-          and royalty alike.
+          {t.subtitle}
         </p>
 
         <div className="hero-actions">
@@ -49,11 +47,11 @@ const Hero = ({ onShopClick }) => {
             whileTap={{ scale: 0.97 }}
             onClick={onShopClick}
           >
-            Explore Collection
+            {t.shop_now}
           </motion.button>
           
           <button className="btn-text-only" onClick={onShopClick}>
-            View Best Sellers
+            {t.explore}
           </button>
         </div>
       </motion.div>

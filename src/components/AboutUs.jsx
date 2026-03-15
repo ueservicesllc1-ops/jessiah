@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Sparkles, Target, Award, ArrowLeft, Quote } from 'lucide-react';
 
-const AboutUs = ({ onBack }) => {
+const AboutUs = ({ onBack, t }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -16,9 +16,9 @@ const AboutUs = ({ onBack }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            Nuestra <em>Historia</em>
+            {t.title} <em>{t.title_em}</em>
           </motion.h1>
-          <p className="last-updated">El legado de Jessiah Hair Line</p>
+          <p className="last-updated">{t.legacy}</p>
         </div>
       </section>
 
@@ -31,14 +31,10 @@ const AboutUs = ({ onBack }) => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <div className="accent-gold">Nace un Sueño</div>
-              <h2>De la necesidad a la <em>excelencia</em></h2>
-              <p>
-                Jessiah Hair Line no comenzó en un laboratorio reluciente, sino en un rincón lleno de esperanza y determinación. Nuestra fundadora, <strong>Jessiah</strong>, vivió gran parte de su vida buscando el secreto para un cabello verdaderamente saludable y majestuoso. Tras años de frustraciones con productos comerciales que solo ofrecían soluciones temporales, decidió que el mundo merecía algo mejor.
-              </p>
-              <p>
-                Con poco más que un puñado de ingredientes naturales y una visión inquebrantable, Jessiah comenzó a experimentar en su propia cocina. Fueron noches de estudio profundo, meses de pruebas y un compromiso absoluto con la calidad lo que dio vida a nuestra primera fórmula magistral.
-              </p>
+              <div className="accent-gold">{t.dream}</div>
+              <h2>{t.excelence_title} <em>{t.excelence_em}</em></h2>
+              <p>{t.p1}</p>
+              <p>{t.p2}</p>
             </motion.div>
             <motion.div 
               className="story-image-wrap"
@@ -58,18 +54,18 @@ const AboutUs = ({ onBack }) => {
             <div className="values-grid">
               <motion.div className="value-card" whileHover={{ y: -10 }}>
                 <Heart className="value-icon" />
-                <h3>Pasión Real</h3>
-                <p>Amamos lo que hacemos. Cada frasco de Jessiah lleva consigo el amor y el respeto por la belleza natural.</p>
+                <h3>{t.v1_t}</h3>
+                <p>{t.v1_d}</p>
               </motion.div>
               <motion.div className="value-card" whileHover={{ y: -10 }}>
                 <Sparkles className="value-icon" />
-                <h3>Innovación</h3>
-                <p>Combinamos secretos ancestrales con la tecnología capilar más avanzada del mercado.</p>
+                <h3>{t.v2_t}</h3>
+                <p>{t.v2_d}</p>
               </motion.div>
               <motion.div className="value-card" whileHover={{ y: -10 }}>
                 <Target className="value-icon" />
-                <h3>Compromiso</h3>
-                <p>Nuestra misión es empoderar a cada mujer y hombre a sentirse como la realeza que ya son.</p>
+                <h3>{t.v3_t}</h3>
+                <p>{t.v3_d}</p>
               </motion.div>
             </div>
           </div>
@@ -83,24 +79,20 @@ const AboutUs = ({ onBack }) => {
             viewport={{ once: true }}
           >
             <Quote className="quote-icon" />
-            <blockquote>
-              "El cabello es la corona que nunca te quitas. Mi misión fue asegurarme de que esa corona brillara más que ninguna otra, sin importar los obstáculos en el camino."
-            </blockquote>
-            <cite>— Jessiah, Fundadora</cite>
+            <blockquote>{t.quote}</blockquote>
+            <cite>{t.author}</cite>
           </motion.div>
         </section>
 
         <section className="overcoming container">
           <div className="overcoming-content">
             <div className="text">
-              <h2>Superando lo <em>imposible</em></h2>
-              <p>
-                El camino no fue fácil. Enfrentamos portazos de grandes distribuidoras y la incredulidad de una industria saturada. Pero cada "no" se convirtió en el combustible para perfeccionar Jessiah. Hoy, lo que empezó como un sueño solitario es una marca reconocida por su excelencia y resultados transformadores.
-              </p>
+              <h2>{t.overcoming}</h2>
+              <p>{t.p3}</p>
               <div className="stats">
                 <div className="stat-item">
                   <Award />
-                  <span>+10K Clientes Felices</span>
+                  <span>{t.stats}</span>
                 </div>
               </div>
             </div>

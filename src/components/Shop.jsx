@@ -4,12 +4,12 @@ import { motion } from 'framer-motion';
 import { MousePointer2, SlidersHorizontal, ArrowLeft } from 'lucide-react';
 import { getProducts } from '../firebase/services';
 
-const Shop = ({ onBack, onAddToCart }) => {
+const Shop = ({ onBack, onAddToCart, t, catT }) => {
   const [products, setProducts] = useState([]);
-  const [filter, setFilter] = useState('Todos');
+  const [filter, setFilter] = useState(catT.all);
   const [isLoading, setIsLoading] = useState(true);
   
-  const categories = ['Todos', 'Limpieza', 'Hidratación', 'Tratamiento', 'Acabado', 'Nutrición'];
+  const categories = [catT.all, catT.cleaning, catT.hydration, catT.treatment, catT.finish, catT.nutrition];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -27,7 +27,7 @@ const Shop = ({ onBack, onAddToCart }) => {
     }
   };
 
-  const filteredProducts = filter === 'Todos' 
+  const filteredProducts = filter === catT.all 
     ? products 
     : products.filter(p => p.category === filter);
 
@@ -40,9 +40,9 @@ const Shop = ({ onBack, onAddToCart }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            Nuestra <em>Colección</em>
+            {t.title} <em>{t.title_em}</em>
           </motion.h1>
-          <p className="subtitle">Lujo y ciencia aplicada a tu cabello</p>
+          <p className="subtitle">{t.subtitle}</p>
         </div>
       </section>
 
@@ -50,7 +50,7 @@ const Shop = ({ onBack, onAddToCart }) => {
         <div className="filters-row">
           <div className="filter-label">
             <SlidersHorizontal size={18} />
-            <span>Filtrar por:</span>
+            <span>{t.filter}</span>
           </div>
           <div className="filter-options">
             {categories.map(cat => (
@@ -65,13 +65,13 @@ const Shop = ({ onBack, onAddToCart }) => {
           </div>
         </div>
         <div className="results-count">
-          Mostrando {filteredProducts.length} productos
+          {t.showing} {filteredProducts.length} {t.products}
         </div>
       </div>
 
       <main className="shop-grid-container container">
         {isLoading ? (
-          <div className="loader">Cargando productos reales...</div>
+          <div className="loader">{t.loading}</div>
         ) : filteredProducts.length > 0 ? (
           <div className="products-grid">
             {filteredProducts.map(product => (
@@ -79,13 +79,15 @@ const Shop = ({ onBack, onAddToCart }) => {
                 key={product.id} 
                 product={product} 
                 onAddToCart={onAddToCart} 
+                t={t}
+                catT={catT}
               />
             ))}
           </div>
         ) : (
           <div className="no-results">
-            <p>No hay productos disponibles por el momento.</p>
-            <button className="btn-gold" onClick={() => setFilter('Todos')}>Ver todo</button>
+            <p>{t.no_results}</p>
+            <button className="btn-gold" onClick={() => setFilter(catT.all)}>{t.view_all}</button>
           </div>
         )}
       </main>

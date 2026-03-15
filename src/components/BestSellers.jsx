@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { getProducts } from '../firebase/services';
 import ProductCard from './ProductCard';
 
-const BestSellers = ({ onAddToCart }) => {
+const BestSellers = ({ onAddToCart, t, catT }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -38,7 +38,7 @@ const BestSellers = ({ onAddToCart }) => {
           viewport={{ once: true }}
           style={{ textAlign: 'center', marginBottom: '40px' }}
         >
-          Best Sellers
+          {t.title} <em>{t.title_em}</em>
         </motion.h2>
 
         <div className="best-sellers-grid">
@@ -47,6 +47,8 @@ const BestSellers = ({ onAddToCart }) => {
               key={product.id} 
               product={product} 
               onAddToCart={onAddToCart} 
+              t={t}
+              catT={catT}
             />
           ))}
         </div>

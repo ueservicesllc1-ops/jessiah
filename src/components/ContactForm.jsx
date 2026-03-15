@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, User, Mail, MessageSquare, Phone } from 'lucide-react';
 
-const ContactForm = () => {
+const ContactForm = ({ t }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,7 +13,7 @@ const ContactForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
-    alert('¡Gracias por contactarnos! Te responderemos pronto.');
+    alert(t.thanks);
     setFormData({ name: '', email: '', phone: '', message: '' });
   };
 
@@ -30,10 +30,9 @@ const ContactForm = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="section-title">Get in <em>Touch</em></h2>
+          <h2 className="section-title">{t.title} <em>{t.title_em}</em></h2>
           <p className="section-subtitle">
-            ¿Tienes alguna pregunta sobre nuestros productos o servicios? 
-            Nuestro equipo de expertos está listo para asesorarte.
+            {t.subtitle}
           </p>
         </motion.div>
 
@@ -54,7 +53,7 @@ const ContactForm = () => {
                 <input
                   type="text"
                   name="name"
-                  placeholder="Tu Nombre"
+                  placeholder={t.name}
                   value={formData.name}
                   onChange={handleChange}
                   required
@@ -69,7 +68,7 @@ const ContactForm = () => {
                   <input
                     type="email"
                     name="email"
-                    placeholder="Correo Electrónico"
+                    placeholder={t.email}
                     value={formData.email}
                     onChange={handleChange}
                     required
@@ -82,7 +81,7 @@ const ContactForm = () => {
                   <input
                     type="tel"
                     name="phone"
-                    placeholder="Teléfono"
+                    placeholder={t.phone}
                     value={formData.phone}
                     onChange={handleChange}
                   />
@@ -95,7 +94,7 @@ const ContactForm = () => {
                 </div>
                 <textarea
                   name="message"
-                  placeholder="¿Cómo podemos ayudarte?"
+                  placeholder={t.message}
                   rows="5"
                   value={formData.message}
                   onChange={handleChange}
@@ -109,7 +108,7 @@ const ContactForm = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <span>Enviar Mensaje</span>
+                <span>{t.send}</span>
                 <Send size={18} />
               </motion.button>
             </form>
@@ -127,8 +126,8 @@ const ContactForm = () => {
               <div className="card-overlay" />
               <img src="/images/contact_dropper.jpg" alt="Jessiah Dropper" className="visual-img" />
               <div className="card-content">
-                <h3>VIVE LA EXPERIENCIA <em>JESSIAH</em></h3>
-                <p>Tratamientos diseñados para la realeza.</p>
+                <h3>{t.experience} <em>{t.exp_em}</em></h3>
+                <p>{t.exp_desc}</p>
               </div>
             </div>
           </motion.div>
