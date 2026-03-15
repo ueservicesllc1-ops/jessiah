@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 import { motion } from 'framer-motion';
 import { MousePointer2, SlidersHorizontal, ArrowLeft } from 'lucide-react';
+import { getProducts } from '../firebase/services';
 
 const Shop = ({ onBack, onAddToCart }) => {
   const [products, setProducts] = useState([]);
@@ -12,16 +13,15 @@ const Shop = ({ onBack, onAddToCart }) => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchProducts();
+    fetchData();
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchData = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/products');
-      const data = await res.json();
+      const data = await getProducts();
       setProducts(data);
     } catch (err) {
-      console.error("Error fetching products:", err);
+      console.error("Error fetching products from Firestore:", err);
     } finally {
       setIsLoading(false);
     }
@@ -33,21 +33,18 @@ const Shop = ({ onBack, onAddToCart }) => {
 
   return (
     <div className="shop-page">
-      <header className="page-header shop-header">
+      <section className="page-hero shop-hero">
         <div className="container">
-          <button className="back-btn" onClick={onBack}>
-            <ArrowLeft size={20} />
-            <span>Volver Inicio</span>
-          </button>
           <motion.h1 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
           >
             Nuestra <em>Colección</em>
           </motion.h1>
           <p className="subtitle">Lujo y ciencia aplicada a tu cabello</p>
         </div>
-      </header>
+      </section>
 
       <div className="shop-controls container">
         <div className="filters-row">

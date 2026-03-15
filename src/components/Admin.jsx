@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Package, MessageSquare, ShoppingCart, Plus, Trash2, Image as ImageIcon, CheckCircle, Clock } from 'lucide-react';
+import { getProducts, addProduct, updateProduct, deleteProduct } from '../firebase/services';
 
 const Admin = ({ onBack }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -13,10 +14,13 @@ const Admin = ({ onBack }) => {
   const [newProduct, setNewProduct] = useState({
     name: '',
     price: '',
+    weight: '',
     description: '',
     category: 'Limpieza',
     image: null
   });
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   // Data States
   const [products, setProducts] = useState([]);
@@ -31,11 +35,17 @@ const Admin = ({ onBack }) => {
 
   const fetchData = async () => {
     try {
-      const pRes = await fetch('http://localhost:3001/api/products').catch(() => ({ json: () => [] }));
-      const mRes = await fetch('http://localhost:3001/api/messages');
-      const oRes = await fetch('http://localhost:3001/api/orders');
+      if (activeTab === 'products') {
+        const pData = await getProducts();
+        setProducts(pData);
+      }
       
-      if (activeTab === 'products') setProducts(await pRes.json());
+      // Keep other fetch for messages/orders if server handles them or implement Firestore for them too
+      const [mRes, oRes] = await Promise.all([
+        fetch('http://localhost:3001/api/messages').catch(() => ({ json: () => [] })),
+        fetch('http://localhost:3001/api/orders').catch(() => ({ json: () => [] }))
+      ]);
+      
       if (activeTab === 'messages') setMessages(await mRes.json());
       if (activeTab === 'orders') setOrders(await oRes.json());
     } catch (err) {
@@ -56,26 +66,65 @@ const Admin = ({ onBack }) => {
 
   const handleProductSubmit = async (e) => {
     e.preventDefault();
+    setIsUploading(true);
     try {
-      const res = await fetch('http://localhost:3001/api/products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newProduct)
-      });
-      if (res.ok) {
-        alert("Producto creado con éxito");
-        setNewProduct({ name: '', price: '', description: '', category: 'Limpieza', image: null });
-        fetchData(); // Refresh list
+      if (editingProduct) {
+        await updateProduct(editingProduct.id, newProduct, newProduct.image);
+        alert("Producto actualizado con éxito en Firestore");
+      } else {
+        await addProduct(newProduct, newProduct.image);
+        alert("Producto creado con éxito en Firestore");
       }
+      
+      setNewProduct({ name: '', price: '', weight: '', description: '', category: 'Limpieza', image: null });
+      setPreviewUrl(null);
+      setEditingProduct(null);
+      fetchData(); // Refresh list
     } catch (err) {
-      console.error("Error creating product:", err);
+      console.error("Error submitting product:", err);
+      alert("Error guardando en Firestore: " + err.message);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleEditClick = (product) => {
+    setEditingProduct(product);
+    setNewProduct({
+      name: product.name,
+      price: product.price,
+      weight: product.weight || '',
+      description: product.description || '',
+      category: product.category,
+      image: null
+    });
+    setPreviewUrl(product.image);
+    // Scroll to form
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const cancelEdit = () => {
+    setEditingProduct(null);
+    setNewProduct({ name: '', price: '', weight: '', description: '', category: 'Limpieza', image: null });
+    setPreviewUrl(null);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setNewProduct({ ...newProduct, image: file });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleDeleteProduct = async (id) => {
-    if (window.confirm("¿Seguro que quieres eliminar este producto?")) {
+    if (window.confirm("¿Seguro que quieres eliminar este producto de Firestore?")) {
       try {
-        await fetch(`http://localhost:3001/api/products/${id}`, { method: 'DELETE' });
+        await deleteProduct(id);
         fetchData();
       } catch (err) {
         console.error("Error deleting product:", err);
@@ -163,7 +212,7 @@ const Admin = ({ onBack }) => {
           {activeTab === 'products' && (
             <div className="admin-products-view">
               <div className="admin-card">
-                <h3>Crear Nuevo Producto</h3>
+                <h3>{editingProduct ? 'Editar Producto' : 'Crear Nuevo Producto'}</h3>
                 <form className="admin-form" onSubmit={handleProductSubmit}>
                   <div className="form-group">
                     <label>Nombre del Producto</label>
@@ -183,6 +232,17 @@ const Admin = ({ onBack }) => {
                         value={newProduct.price}
                         onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
                         placeholder="0.00" 
+                        required 
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Peso (lb)</label>
+                      <input 
+                        type="number" 
+                        step="0.1"
+                        value={newProduct.weight}
+                        onChange={(e) => setNewProduct({...newProduct, weight: e.target.value})}
+                        placeholder="0.5" 
                         required 
                       />
                     </div>
@@ -209,16 +269,51 @@ const Admin = ({ onBack }) => {
                   </div>
                   <div className="form-group">
                     <label>Imagen del Producto</label>
-                    <div className="file-upload-zone">
-                      <ImageIcon size={24} />
-                      <span>Click para subir foto</span>
-                      <input type="file" accept="image/*" />
+                    <div className={`file-upload-zone ${previewUrl ? 'has-preview' : ''}`}>
+                      {previewUrl ? (
+                        <div className="image-preview-container">
+                          <img src={previewUrl} alt="Vista previa" className="admin-img-preview" />
+                          <button 
+                            type="button" 
+                            className="remove-preview"
+                            onClick={() => {
+                              setPreviewUrl(null);
+                              setNewProduct({...newProduct, image: null});
+                            }}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <ImageIcon size={24} />
+                          <span>Click para subir foto</span>
+                        </>
+                      )}
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={handleImageChange}
+                      />
                     </div>
                   </div>
-                  <button type="submit" className="admin-btn-primary">
-                    <Plus size={18} />
-                    Guardar Producto
-                  </button>
+                  <div className="form-actions">
+                    <button type="submit" className="admin-btn-primary" disabled={isUploading}>
+                      {isUploading ? (
+                        <>Cargando...</>
+                      ) : (
+                        <>
+                          {editingProduct ? <CheckCircle size={18} /> : <Plus size={18} />}
+                          {editingProduct ? 'Actualizar Producto' : 'Guardar Producto'}
+                        </>
+                      )}
+                    </button>
+                    {editingProduct && (
+                      <button type="button" className="admin-btn-secondary" onClick={cancelEdit}>
+                        Cancelar Edición
+                      </button>
+                    )}
+                  </div>
                 </form>
               </div>
 
@@ -227,20 +322,31 @@ const Admin = ({ onBack }) => {
                 <table className="admin-table">
                   <thead>
                     <tr>
+                      <th>Imagen</th>
                       <th>Nombre</th>
                       <th>Categoría</th>
                       <th>Precio</th>
+                      <th>Peso (lb)</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
                     {products.map(p => (
                       <tr key={p.id}>
+                        <td>
+                          <div className="admin-thumb">
+                            <img src={p.image} alt={p.name} />
+                          </div>
+                        </td>
                         <td>{p.name}</td>
                         <td><span className="badge">{p.category}</span></td>
                         <td>${p.price}</td>
+                        <td>{p.weight || '0'} lb</td>
                         <td>
-                          <button className="text-danger" onClick={() => handleDeleteProduct(p.id)}><Trash2 size={16} /></button>
+                          <div className="admin-actions">
+                            <button className="text-secondary" onClick={() => handleEditClick(p)}>Editar</button>
+                            <button className="text-danger" onClick={() => handleDeleteProduct(p.id)}><Trash2 size={16} /></button>
+                          </div>
                         </td>
                       </tr>
                     ))}

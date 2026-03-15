@@ -34,21 +34,18 @@ const PrivacyPolicy = ({ onBack }) => {
   return (
     <div className="privacy-page">
       {/* Header Specific for the Page */}
-      <header className="page-header">
+      <section className="page-hero privacy-hero">
         <div className="container">
-          <button className="back-btn" onClick={onBack}>
-            <ArrowLeft size={20} />
-            <span>Volver</span>
-          </button>
           <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
           >
             Política de <em>Privacidad</em>
           </motion.h1>
           <p className="last-updated">Última actualización: Marzo 2026</p>
         </div>
-      </header>
+      </section>
 
       <main className="privacy-content container">
         <motion.div 

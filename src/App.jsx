@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import FeaturedSection from './components/FeaturedSection';
-import CategoryGrid from './components/CategoryGrid';
+
+
 import ContactForm from './components/ContactForm';
-import CartDrawer from './components/CartDrawer';
+import Cart from './components/Cart';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsAndConditions from './components/TermsAndConditions';
 import AboutUs from './components/AboutUs';
 import Shop from './components/Shop';
 import Admin from './components/Admin';
+import WhyChoose from './components/WhyChoose';
+import BestSellers from './components/BestSellers';
 
 function App() {
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [currentView, setCurrentView] = useState('home');
   const [cartItems, setCartItems] = useState([]);
 
@@ -22,6 +23,7 @@ function App() {
   const navigateToAbout = () => setCurrentView('about');
   const navigateToShop = () => setCurrentView('shop');
   const navigateToAdmin = () => setCurrentView('admin');
+  const navigateToCart = () => setCurrentView('cart');
 
   const handleAddToCart = (product) => {
     setCartItems(prev => {
@@ -33,7 +35,7 @@ function App() {
       }
       return [...prev, { ...product, quantity: 1 }];
     });
-    setIsCartOpen(true);
+    navigateToCart();
   };
 
   const updateCartQuantity = (id, delta) => {
@@ -47,44 +49,59 @@ function App() {
   };
 
   return (
-    <div>
-      {currentView === 'home' ? (
-        <>
-          <Navbar onCartClick={() => setIsCartOpen(true)} onShopClick={navigateToShop} />
-          <main>
-            <Hero onShopClick={navigateToShop} />
-            <FeaturedSection onShopClick={navigateToShop} />
-            <CategoryGrid onShopClick={navigateToShop} />
-            <ContactForm />
-          </main>
-        </>
-      ) : currentView === 'privacy' ? (
-        <PrivacyPolicy onBack={navigateToHome} />
-      ) : currentView === 'terms' ? (
-        <TermsAndConditions onBack={navigateToHome} />
-      ) : currentView === 'about' ? (
-        <AboutUs onBack={navigateToHome} />
-      ) : currentView === 'shop' ? (
-        <Shop onBack={navigateToHome} onAddToCart={handleAddToCart} />
-      ) : (
-        <Admin onBack={navigateToHome} />
-      )}
-
-      <CartDrawer 
-        isOpen={isCartOpen} 
-        onClose={() => setIsCartOpen(false)} 
-        cartItems={cartItems}
-        updateQuantity={updateCartQuantity}
-        removeItem={removeFromCart}
-        setCartItems={setCartItems}
+    <div className="app-container">
+      <Navbar 
+        onCartClick={navigateToCart} 
+        onShopClick={navigateToShop}
+        onHomeClick={navigateToHome}
+        onAboutClick={navigateToAbout}
+        onContactClick={() => {
+          navigateToHome();
+          setTimeout(() => {
+            const el = document.getElementById('contacto');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        }}
+        currentView={currentView}
       />
+
+      <main className="content-wrap">
+        {currentView === 'home' ? (
+          <>
+            <Hero onShopClick={navigateToShop} />
+            <WhyChoose />
+            <BestSellers onAddToCart={handleAddToCart} />
+
+
+            <ContactForm />
+          </>
+        ) : currentView === 'privacy' ? (
+          <PrivacyPolicy onBack={navigateToHome} />
+        ) : currentView === 'terms' ? (
+          <TermsAndConditions onBack={navigateToHome} />
+        ) : currentView === 'about' ? (
+          <AboutUs onBack={navigateToHome} />
+        ) : currentView === 'shop' ? (
+          <Shop onBack={navigateToHome} onAddToCart={handleAddToCart} />
+        ) : currentView === 'cart' ? (
+          <Cart 
+            onBack={navigateToShop} 
+            cartItems={cartItems}
+            updateQuantity={updateCartQuantity}
+            removeItem={removeFromCart}
+            setCartItems={setCartItems}
+          />
+        ) : (
+          <Admin onBack={navigateToHome} />
+        )}
+      </main>
 
       {currentView !== 'admin' && (
         <footer className="footer">
           <div className="footer-container">
             <div className="footer-left">
               <div className="footer-logo">
-                <img src="/images/logo2.png" alt="Jessiah Hair Line" />
+                <img src="/images/LOGO.png" alt="Jessiah Hair Line" />
               </div>
             </div>
             
@@ -115,7 +132,7 @@ function App() {
               <button 
                 className="admin-login-link" 
                 onClick={navigateToAdmin}
-                style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.2)', fontSize: '0.6rem', cursor: 'pointer' }}
+                style={{ background: 'none', border: 'none', color: '#000', fontSize: '0.65rem', fontWeight: 'bold', cursor: 'pointer', opacity: 0.6 }}
               >
                 Acceso Admin
               </button>

@@ -29,9 +29,15 @@ const ProductCard = ({ product, onAddToCart }) => {
         
         <div className="product-rating">
           {[...Array(5)].map((_, i) => (
-            <Star key={i} size={12} fill={i < product.rating ? "#c8882a" : "none"} stroke="#c8882a" />
+            <Star 
+              key={i} 
+              size={11} 
+              fill={i < (product.rating || 5) ? "#c8882a" : "none"} 
+              stroke="#c8882a" 
+              strokeWidth={1.5}
+            />
           ))}
-          <span>({product.reviews})</span>
+          {product.reviews > 0 && <span>({product.reviews})</span>}
         </div>
         
         <div className="product-price">

@@ -37,21 +37,18 @@ const TermsAndConditions = ({ onBack }) => {
 
   return (
     <div className="terms-page">
-      <header className="page-header">
+      <section className="page-hero terms-hero">
         <div className="container">
-          <button className="back-btn" onClick={onBack}>
-            <ArrowLeft size={20} />
-            <span>Volver</span>
-          </button>
           <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
           >
             Términos y <em>Condiciones</em>
           </motion.h1>
           <p className="last-updated">Última actualización: Marzo 2026</p>
         </div>
-      </header>
+      </section>
 
       <main className="privacy-content container">
         <motion.div 

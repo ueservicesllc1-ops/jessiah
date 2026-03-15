@@ -9,21 +9,18 @@ const AboutUs = ({ onBack }) => {
 
   return (
     <div className="about-page">
-      <header className="page-header about-header">
+      <section className="page-hero about-hero">
         <div className="container">
-          <button className="back-btn" onClick={onBack}>
-            <ArrowLeft size={20} />
-            <span>Volver</span>
-          </button>
           <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
           >
             Nuestra <em>Historia</em>
           </motion.h1>
           <p className="last-updated">El legado de Jessiah Hair Line</p>
         </div>
-      </header>
+      </section>
 
       <main className="about-content">
         <section className="story-intro container">

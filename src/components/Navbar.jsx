@@ -9,18 +9,23 @@ const navLinks = [
   { name: 'Contact', href: '#contacto' },
 ];
 
-const Navbar = ({ onCartClick, onShopClick }) => {
+const Navbar = ({ onCartClick, onShopClick, onHomeClick, onAboutClick, onContactClick, currentView }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleNavClick = (e, name, href) => {
+    e.preventDefault();
+    if (name === 'Home') onHomeClick?.();
+    else if (name === 'About') onAboutClick?.();
+    else if (name === 'Shop') onShopClick?.();
+    else if (name === 'Contact') onContactClick?.();
+  };
 
   return (
     <>
       <nav className="navbar">
         {/* Logo */}
-        <a className="navbar-logo" href="#">
-          <div className="navbar-logo-text">
-            <span className="brand-name">JESSIAH</span>
-            <span className="brand-sub">HAIR LINE</span>
-          </div>
+        <a className="navbar-logo" href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+          <img src="/images/LOGO.png" alt="Jessiah Logo" style={{ height: '50px', width: 'auto' }} />
         </a>
 
         {/* Center links */}
@@ -29,13 +34,8 @@ const Navbar = ({ onCartClick, onShopClick }) => {
             <li key={l.name}>
               <a 
                 href={l.href} 
-                className={i === 0 ? 'active' : ''}
-                onClick={(e) => {
-                  if (l.name === 'Shop' && onShopClick) {
-                    e.preventDefault();
-                    onShopClick();
-                  }
-                }}
+                className={currentView === l.name.toLowerCase() ? 'active' : ''}
+                onClick={(e) => handleNavClick(e, l.name, l.href)}
               >
                 {l.name}
               </a>
@@ -79,13 +79,15 @@ const Navbar = ({ onCartClick, onShopClick }) => {
             <X size={26} />
           </button>
           {navLinks.map((l) => (
-            <a key={l.name} href={l.href} onClick={(e) => {
-              setMenuOpen(false);
-              if (l.name === 'Shop' && onShopClick) {
-                e.preventDefault();
-                onShopClick();
-              }
-            }}>
+            <a 
+              key={l.name} 
+              href={l.href} 
+              className={currentView === l.name.toLowerCase() ? 'active' : ''}
+              onClick={(e) => {
+                setMenuOpen(false);
+                handleNavClick(e, l.name, l.href);
+              }}
+            >
               {l.name}
             </a>
           ))}

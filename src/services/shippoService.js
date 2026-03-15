@@ -1,22 +1,28 @@
-export const calculateShippingRates = async (addressData) => {
+export const calculateShippingRates = async (addressData, items) => {
   console.log("Calculando tarifas reales para:", addressData);
   
   try {
     const response = await fetch('http://localhost:3001/api/shipping/rates', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(addressData)
+      body: JSON.stringify({ ...addressData, items })
     });
 
-    if (!response.ok) throw new Error("Error en la respuesta de Shippo");
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.details || errorData.error || "Error en Shippo");
+    }
 
-    const rates = await response.json();
-    return rates;
+    const data = await response.json();
+    return data; // Return full data { rates, correctedAddress }
   } catch (error) {
     console.error("Error obteniendo tarifas de Shippo:", error);
-    // Fallback en caso de error para no bloquear la compra
+    // Mostrar alerta al usuario sobre la dirección
+    alert("⚠️ " + error.message);
+    
+    // Solo devolvemos el fallback si es necesario, pero ahora el usuario sabe qué pasó
     return [
-      { id: "fallback_1", provider: "Standard", service: "Envío Estándar", price: 15.00, days: 5 }
+      { id: "fallback_1", provider: "Standard", service: "Envío Estándar (Contingencia)", price: 15.00, days: 5 }
     ];
   }
 };
