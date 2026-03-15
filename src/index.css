@@ -183,6 +183,153 @@ body {
 }
 .icon-btn:hover { color: var(--gold); }
 
+.cart-btn-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--gold);
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  border: 1px solid white;
+}
+
+/* ═══════════════════════════════════════
+   ADDED TO CART MODAL
+   ═══════════════════════════════════════ */
+.added-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.added-modal-card {
+  background: white;
+  width: 100%;
+  max-width: 440px;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.added-modal-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: var(--gold);
+}
+
+.added-modal-icon {
+  width: 70px;
+  height: 70px;
+  background: #fdf6e9;
+  color: var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px;
+}
+
+.added-modal-card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--black);
+}
+
+.added-modal-card p {
+  font-size: 1rem;
+  color: rgba(0,0,0,0.6);
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.product-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.shortcut-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.shortcut-info h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.shortcut-info p {
+  font-size: 0.8rem;
+  margin-bottom: 0;
+  color: var(--gold-mid);
+  font-weight: 600;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-btn-view {
+  width: 100%;
+}
+
+.modal-btn-continue {
+  background: none;
+  border: 1px solid #eee;
+  padding: 12px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #777;
+}
+
+.modal-btn-continue:hover {
+  background: #f9f9f9;
+  color: var(--black);
+  border-color: #ddd;
+}
+
 /* ═══════════════════════════════════════
    NAVBAR RESPONSIVE
 ═══════════════════════════════════════ */

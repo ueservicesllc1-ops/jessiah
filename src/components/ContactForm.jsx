@@ -125,7 +125,7 @@ const ContactForm = () => {
           >
             <div className="visual-card">
               <div className="card-overlay" />
-              <img src="/images/contact_experience.png" alt="Luxury Beauty" className="visual-img" />
+              <img src="/images/contact_dropper.jpg" alt="Jessiah Dropper" className="visual-img" />
               <div className="card-content">
                 <h3>VIVE LA EXPERIENCIA <em>JESSIAH</em></h3>
                 <p>Tratamientos diseñados para la realeza.</p>

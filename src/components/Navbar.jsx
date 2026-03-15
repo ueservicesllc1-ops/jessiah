@@ -9,7 +9,7 @@ const navLinks = [
   { name: 'Contact', href: '#contacto' },
 ];
 
-const Navbar = ({ onCartClick, onShopClick, onHomeClick, onAboutClick, onContactClick, currentView }) => {
+const Navbar = ({ onCartClick, onShopClick, onHomeClick, onAboutClick, onContactClick, currentView, cartCount = 0 }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleNavClick = (e, name, href) => {
@@ -48,9 +48,12 @@ const Navbar = ({ onCartClick, onShopClick, onHomeClick, onAboutClick, onContact
           <button className="icon-btn" aria-label="Search">
             <Search size={16} />
           </button>
-          <button className="icon-btn" aria-label="Cart" onClick={onCartClick}>
-            <ShoppingBag size={16} />
-          </button>
+          <div className="cart-btn-wrapper">
+            <button className="icon-btn" aria-label="Cart" onClick={onCartClick}>
+              <ShoppingBag size={18} />
+            </button>
+            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+          </div>
           <button 
             className="btn-gold" 
             style={{ padding: '9px 22px', fontSize: '0.68rem' }}

@@ -4,6 +4,7 @@ import axios from 'axios';
 
 // Firestore collection reference
 const productsRef = collection(db, 'products');
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export const getProducts = async () => {
   const q = query(productsRef, orderBy('createdAt', 'desc'));
@@ -25,7 +26,7 @@ export const addProduct = async (productData, imageFile) => {
     formData.append('image', imageFile);
 
     try {
-      const response = await axios.post('http://localhost:3001/upload', formData, {
+      const response = await axios.post(`${API_URL}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -62,7 +63,7 @@ export const updateProduct = async (id, productData, imageFile) => {
     const formData = new FormData();
     formData.append('image', imageFile);
     try {
-      const response = await axios.post('http://localhost:3001/upload', formData, {
+      const response = await axios.post(`${API_URL}/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       imageUrl = response.data.url;

@@ -41,9 +41,10 @@ const Admin = ({ onBack }) => {
       }
       
       // Keep other fetch for messages/orders if server handles them or implement Firestore for them too
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
       const [mRes, oRes] = await Promise.all([
-        fetch('http://localhost:3001/api/messages').catch(() => ({ json: () => [] })),
-        fetch('http://localhost:3001/api/orders').catch(() => ({ json: () => [] }))
+        fetch(`${API_URL}/api/messages`).catch(() => ({ json: () => [] })),
+        fetch(`${API_URL}/api/orders`).catch(() => ({ json: () => [] }))
       ]);
       
       if (activeTab === 'messages') setMessages(await mRes.json());

@@ -1,8 +1,10 @@
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
 export const calculateShippingRates = async (addressData, items) => {
   console.log("Calculando tarifas reales para:", addressData);
   
   try {
-    const response = await fetch('http://localhost:3001/api/shipping/rates', {
+    const response = await fetch(`${API_URL}/api/shipping/rates`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...addressData, items })

@@ -70,7 +70,8 @@ const Cart = ({ onBack, cartItems, updateQuantity, removeItem, setCartItems }) =
 
     // 2. Send to Admin
     try {
-      await fetch('http://localhost:3001/api/orders', {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      await fetch(`${API_URL}/api/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData)
@@ -274,8 +275,8 @@ const Cart = ({ onBack, cartItems, updateQuantity, removeItem, setCartItems }) =
                       <div className="zelle-badge">Zelle</div>
                       <p>Para completar tu compra, realiza una transferencia a:</p>
                       <div className="zelle-data">
-                         <strong>+1 (888) 123-4567</strong>
-                         <span>Nombre: Jessiah Hair Line LLC</span>
+                         <strong>(929) 472-5986</strong>
+                         <span>Nombre: Rachell Cabrera</span>
                       </div>
                    </div>
 
