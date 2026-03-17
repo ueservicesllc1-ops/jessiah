@@ -41,6 +41,7 @@ const Admin = ({ onBack, t }) => {
       }
       
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      console.log("Admin Panel buscando datos en:", API_URL);
       const [mRes, oRes] = await Promise.all([
         fetch(`${API_URL}/api/messages`).catch(() => ({ json: () => [] })),
         fetch(`${API_URL}/api/orders`).catch(() => ({ json: () => [] }))

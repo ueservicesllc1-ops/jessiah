@@ -64,6 +64,7 @@ const Cart = ({ onBack, cartItems, updateQuantity, removeItem, setCartItems, t }
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      console.log("Checkout procesando orden en:", API_URL);
       await fetch(`${API_URL}/api/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -5,6 +5,7 @@ import axios from 'axios';
 // Firestore collection reference
 const productsRef = collection(db, 'products');
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+console.log("Servicios de API usando URL:", API_URL);
 
 export const getProducts = async () => {
   const q = query(productsRef, orderBy('createdAt', 'desc'));

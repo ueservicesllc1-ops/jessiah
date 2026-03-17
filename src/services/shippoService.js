@@ -1,4 +1,5 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+console.log("Shippo Service usando URL:", API_URL);
 
 export const calculateShippingRates = async (addressData, items) => {
   console.log("Calculando tarifas reales para:", addressData);
